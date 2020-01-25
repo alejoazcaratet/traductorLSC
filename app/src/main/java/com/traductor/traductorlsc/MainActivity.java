@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private TextToSpeech tts;
     private SpeechRecognizer recognizer;
     private String text;
-    private ArrayList<String> palabras;
+    private ArrayList<String> palabras, listann;
     private boolean acierto;
 
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -121,16 +121,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     public void onClick(View view) {
-        consultar();
+        consultar(editText.getText().toString());
     }
 
-    private void consultar() {
+    private void consultar(String texto) {
         String palabra;
-        String previoPalabra = editText.getText().toString().toLowerCase();
+        String previoPalabra = texto;
         if (previoPalabra.equals("papá")) previoPalabra = "papaa";
         if (previoPalabra.contains(" ")) previoPalabra = previoPalabra.replace(" ", "");
-        if (previoPalabra.contains("á")) previoPalabra = previoPalabra.replace("á", "a");
+        if (previoPalabra.contains("N")) previoPalabra = previoPalabra.replace("N", "nn");
         if (previoPalabra.contains("ñ")) previoPalabra = previoPalabra.replace("ñ", "nn");
+        if (previoPalabra.contains("á")) previoPalabra = previoPalabra.replace("á", "a");
         if (previoPalabra.contains("é")) previoPalabra = previoPalabra.replace("é", "e");
         if (previoPalabra.contains("í")) previoPalabra = previoPalabra.replace("í", "i");
         if (previoPalabra.contains("ó")) previoPalabra = previoPalabra.replace("ó", "o");
@@ -139,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         palabra = previoPalabra;
 
         buscarVideo(palabra);
+        //textView.setText(" "+palabra);
+
     }
 
     public static int getResId(String resName, Class<?> c) {
@@ -223,9 +226,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         if (text != null) {
             text = text.replace(" ", "");
             for (int i = 0; i < palabras.size(); i++) {
-                //System.out.println("Si " + palabras.get(i) + " contiene " + text + " > " + palabras.get(i).contains(text));
-                if (palabras.get(i).contains(text)) {
-                    acierto = true;
+                for (int j = 0; j < listann.size(); j++) {
+                    //System.out.println("Si " + palabras.get(i) + " contiene " + text + " > " + palabras.get(i).contains(text));
+                    if (palabras.get(i).contains(text)) {
+                        acierto = true;
+                    }
+                    if (listann.get(j).contains(text)) {
+                        acierto = true;
+                    }
                 }
             }
         } else {
@@ -234,14 +242,15 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
 
         if (acierto) {
+            consultar(text);
             editText.setText(text);
-            buscarVideo(text);
+            //buscarVideo(text);
         } else {
+            editText.setText("");
             textView.setText("¡Intentalo de nuevo!");
         }
         text = null;
         acierto = false;
-        //*/
     }
 
     @Override
@@ -301,5 +310,18 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             db.endTransaction();
         }
         conn.close();
+
+        listann = new ArrayList<>();
+        listann.add("aNo");
+        listann.add("cumpleaNos");
+        listann.add("piNa");
+        listann.add("aNo nuevo");
+        listann.add("baNar");
+        listann.add("baNo");
+        listann.add("diadelniNo");
+        listann.add("piNa");
+        listann.add("maNana");
+        listann.add("niNo");
+        listann.add("pequeNo");
     }
 }
