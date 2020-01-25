@@ -100,12 +100,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             }
         });
 
-        //Para poner los videos en el reproductor desde la carpeta RAW
+        //Usando clase para covertir String de la palabra en un objeto
         resID = getResId("defecto", R.raw.class);
+        //Para poner los videos en el reproductor desde la carpeta RAW
         videoView.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + resID));
         videoView.start();
 
+        //Para crear la base de datos y llenarla con toda la informacio
         registrarDatos();
+
+        //Crea un arreglo para almacenar todas las palabras
         obtenerPalabras();
     }
 
@@ -158,10 +162,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         recognizer.addListener(this);
 
         //Aquí indicamos el archivo que contiene las palabras clave que queremos reconocer
-        // para realizar diferentes acciones. En este caso yo creo un archivo llamado "keys.gram"
-        //File keysGrammar = new File(assetsDir, "nivel1.gram");
-        File keysGrammar = new File(assetsDir, "words1.gram");
-        recognizer.addKeywordSearch("frases", keysGrammar);
+        // para realizar diferentes acciones. En este caso se crea un archivo llamado "words1.gram"
+
+        //File keysGrammar = new File(assetsDir, "words1.gram");
+        //recognizer.addKeywordSearch("frases", keysGrammar);
+        File languageModel = new File(assetsDir, "words1.lm");
+        recognizer.addNgramSearch("frases", languageModel);
+
     }
 
     @Override
@@ -234,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         }
         text = null;
         acierto = false;
+        //*/
     }
 
     @Override
